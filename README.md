@@ -47,20 +47,26 @@ During transfers, data is streamed through the running process: each chunk is do
 
 To maximize throughput, cloudfile-mover uses a pool of threads to handle different portions of the file concurrently. The file size is determined via a metadata call (e.g. S3 HeadObject, GCS blob size, Azure get properties) so we know how many chunks to split into. The default chunk size (e.g. 64 MB) and number of threads (e.g. 4 threads) can be adjusted. Each thread is responsible for transferring one chunk of the file:
 
-   **Download**: For each chunk, the source is read from a specific byte range. For S3, we use the Range header in GetObject to fetch a byte range. For GCS, we use the blob’s download_to_file with start and end parameters to read a segment. For Azure, we call download_blob(offset, length) to retrieve a block of bytes. This ensures we only pull the needed segment of data.
+**Download**: For each chunk, the source is read from a specific byte range. For S3, we use the Range header in GetObject to fetch a byte range. For GCS, we use the blob’s download_to_file with start and end parameters to read a segment. For Azure, we call download_blob(offset, length) to retrieve a block of bytes. This ensures we only pull the needed segment of data.
 
-   **Upload**: The retrieved chunk is then uploaded to the destination. Depending on the destination:
-        **S3**: we call upload_part (with the multipart upload ID) for that chunk. Each uploaded part returns an ETag which we collect for final assembly.
-        **GCS**: we upload the chunk to a temporary object (with a unique name suffix). No special API is needed for chunk upload, just the standard upload_from_string for the bytes.
-        **Azure**: we call stage_block on the BlobClient with a unique block ID for that chunk. Azure requires block IDs to be base64-encoded; we generate IDs derived from the chunk number (zero-padded) so that we can commit them in order later.
+**Upload**: The retrieved chunk is then uploaded to the destination. Depending on the destination:
+
+**S3**: we call upload_part (with the multipart upload ID) for that chunk. Each uploaded part returns an ETag which we collect for final assembly.
+
+**GCS**: we upload the chunk to a temporary object (with a unique name suffix). No special API is needed for chunk upload, just the standard upload_from_string for the bytes.
+
+**Azure**: we call stage_block on the BlobClient with a unique block ID for that chunk. Azure requires block IDs to be base64-encoded; we generate IDs derived from the chunk number (zero-padded) so that we can commit them in order later.
 
 The library takes care to assemble these parts after all threads complete:
-        **S3**: calls CompleteMultipartUpload with the list of part ETags and numbers to finalize the object on S3.
-        **GCS**: uses the compose operation. We gather all the temporary blob pieces and call destination_blob.compose(sources=...) on them.
- to create the final blob. After a successful compose, the source chunk blobs are deleted (since compose does not remove them automatically).
-        **Azure**: calls commit_block_list with the list of block IDs. This finalizes the blob, making all staged blocks part of the committed blob.
 
-**Memory usage**: Each thread holds at most one chunk in memory at a time. For a very large file, if memory is a concern, you can reduce the --threads or chunk size. The default settings are chosen to balance performance with not overwhelming memory or network. 
+**S3**: calls CompleteMultipartUpload with the list of part ETags and numbers to finalize the object on S3.
+
+**GCS**: uses the compose operation. We gather all the temporary blob pieces and call destination_blob.compose(sources=...) on them to create the final blob. After a successful compose, the source chunk blobs are deleted (since compose does not remove them automatically).
+
+**Azure**: calls commit_block_list with the list of block IDs. This finalizes the blob, making all staged blocks part of the committed blob.
+
+**Memory usage**: Each thread holds at most one chunk in memory at a time. For a very large file, if memory is a concern, you can reduce the --threads or chunk size. The default settings are chosen to balance performance with not overwhelming memory or network.
+
 **Concurrent throughput**: By downloading and uploading in parallel, the transfer can saturate available network bandwidth in both source and destination directions. For example, while one thread is waiting for a chunk download from S3, another thread can be uploading a previously downloaded chunk to Azure. This overlapping of I/O improves total transfer time.
 
 ## Retry and Error Handling ##
@@ -120,7 +126,7 @@ CLI options:
 
 (Future extension) One could imagine a --quiet flag to suppress even info logs, but by default if you don’t use --verbose, the output is minimal.
 
-The CLI is implemented in the package’s "__main__.py" so that python -m cloudfile_mover ... also works. It uses Python’s argparse to parse the arguments and then calls the internal move_file function with those parameters.
+The CLI is implemented in the package’s `__main__.py` so that python -m cloudfile_mover ... also works. It uses Python’s argparse to parse the arguments and then calls the internal move_file function with those parameters.
 
 ## Importable Module Usage ##
 Developers can also import and use the library directly in Python. For instance:
