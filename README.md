@@ -34,6 +34,7 @@ CloudFile-Mover is a Python library designed for high-performance transfer (move
 ## Cross-Provider Transfer Support
 
 To support multiple cloud providers, the library parses URLs with different schemes and dispatches to the appropriate service SDKs:
+
 **AWS S3**: URLs starting with s3://bucket_name/object_path use the boto3 library. The implementation uses S3’s multipart upload API for large files: initiating a multipart upload, uploading each part in parallel, then completing the upload. This approach is necessary to handle big objects (up to 5 TiB) and improves transfer speed by parallelism. We ensure each part meets S3’s size constraints (at least 5 MiB except last)
 
 **Google Cloud Storage**: URLs with gs://bucket_name/blob_path use the google-cloud-storage library. GCS doesn’t have a direct multipart upload, so our strategy is to split the file and upload chunks as temporary objects, then compose them into the final object. GCS allows composing between 1 and 32 objects in a single request (if more than 32 chunks, multiple compose operations are done in sequence). After a successful compose, the temporary chunk objects are deleted to avoid extra storage costs.
