@@ -208,9 +208,13 @@ This will perform the same operation programmatically. Adjust threads and show_p
 
 ## How it Works ##
 cloudfile-mover splits the file into chunks and transfers them in parallel using the cloud providers' APIs:
+
 **AWS S3**: uses multipart upload for files larger than 5MB.
+
 **GCS**: uploads chunks as temporary objects, then uses the compose API to merge them.
+
 **Azure**: uses block blob uploads (staging blocks and then committing them).
+
 This approach enables transferring very large files (multi-GB or even TB) efficiently. See the project documentation for more details on the implementation.
 
 ## License ##
