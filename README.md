@@ -102,6 +102,13 @@ The GCP credentials have Storage Object view/download on the source and Storage 
 
 The Azure credentials have Blob read on source, write on destination, and delete on source container.
 
+
+## Installation ##
+
+```
+pip install cloudfile-mover
+```
+
 ## Command-Line Interface (CLI) ##
 The package installs a console script cloudfile-mover which exposes the functionality via a command-line tool. The CLI usage is:
 
