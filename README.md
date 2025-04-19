@@ -220,7 +220,8 @@ This README provides an overview, installation, usage examples (CLI and code), a
 
 ### `LICENSE`
 
-MIT License Copyright (c) 2025 Raghava Chellu
+MIT License
+Copyright (c) 2025 Raghava Chellu
 Permission is hereby granted, free of charge, to any person obtaining a copy ...
 
 *(Full MIT License text included here.)*
