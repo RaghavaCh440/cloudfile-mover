@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Cloudfile-mover is a Python library designed for high-performance transfer (move) of large files between cloud storage providers: Amazon S3, Google Cloud Storage (GCS), and Azure Blob Storage. It handles the complexities of cross-provider data transfer by efficiently downloading from the source and uploading to the destination in parallel, using multi-threading and cloud-native large file APIs. This tool aims to achieve true "move" semantics – the source file is deleted after a successful copy to the destination – while providing robust features like multipart uploads, progress monitoring, and automatic retries. Moving very large objects across different cloud providers can be challenging. Each provider has its own API and best practices for large file transfers. For example, AWS S3 supports Multipart Upload for files up to 5 TiB (with up to 10,000 parts), requiring each part (except the last) to be at least 5 MiB in size. Google Cloud Storage lacks an exact multipart upload API but allows composing up to 32 separate uploaded objects into one final object. Azure Blob Storage uses Block Blobs, where large files are broken into blocks that can be uploaded independently (even concurrently) and then committed to form the final blob. cloudfile-mover abstracts these details, providing a uniform interface to move data between any two supported cloud buckets.
+CloudFile-Mover is a Python library designed for high-performance transfer (move) of large files between cloud storage providers: Amazon S3, Google Cloud Storage (GCS), and Azure Blob Storage. It handles the complexities of cross-provider data transfer by efficiently downloading from the source and uploading to the destination in parallel, using multi-threading and cloud-native large file APIs. This tool aims to achieve true "move" semantics – the source file is deleted after a successful copy to the destination – while providing robust features like multipart uploads, progress monitoring, and automatic retries. Moving very large objects across different cloud providers can be challenging. Each provider has its own API and best practices for large file transfers. For example, AWS S3 supports Multipart Upload for files up to 5 TiB (with up to 10,000 parts), requiring each part (except the last) to be at least 5 MiB in size. Google Cloud Storage lacks an exact multipart upload API but allows composing up to 32 separate uploaded objects into one final object. Azure Blob Storage uses Block Blobs, where large files are broken into blocks that can be uploaded independently (even concurrently) and then committed to form the final blob. cloudfile-mover abstracts these details, providing a uniform interface to move data between any two supported cloud buckets.
 
 ## Features
 
@@ -80,6 +80,7 @@ The CLI supports a --quiet mode implicitly (not printing the progress or any inf
 
 ## Authentication and Security ##
 No sensitive credentials are stored in this library’s code. Instead, it relies on the standard authentication mechanisms provided by each cloud’s SDK:
+
 **AWS S3**: Uses Boto3’s default credential chain. This means it will look for AWS credentials in the environment (AWS_ACCESS_KEY_ID, etc.), AWS config files, or IAM roles attached to the compute (if running on AWS). If running on AWS infrastructure (EC2, ECS, etc.) with an IAM role, no explicit credential is needed – boto3 will automatically use it. If running locally, the user can set environment vars or have a ~/.aws/credentials file.
 
 **Google Cloud Storage**: Uses Google Cloud’s Application Default Credentials (ADC). The google-cloud-storage client will automatically find credentials based on environment, such as a GOOGLE_APPLICATION_CREDENTIALS environment variable (pointing to a service account JSON file) or Google Cloud SDK’s login. ADC is the recommended approach for Google’s client libraries to obtain credentials from the environment or runtime context.
@@ -109,6 +110,7 @@ $ cloudfile-mover s3://my-bucket/data.bin gs://my-gcs-bucket/data.bin --threads 
 This will transfer data.bin from an S3 bucket to a GCS bucket using 8 threads, with verbose logging. Upon success, the source data.bin on S3 is deleted.
 
 CLI options:
+
 **--threads N (or -t N)**: Number of parallel threads to use (defaults to 4). Using more threads can speed up transfer for high-bandwidth environments, but may consume more memory and network I/O.
 
 **--no-progress**: Disable the tqdm progress bar. Useful for scripting or if output is being captured to a file.
@@ -117,7 +119,7 @@ CLI options:
 
 (Future extension) One could imagine a --quiet flag to suppress even info logs, but by default if you don’t use --verbose, the output is minimal.
 
-The CLI is implemented in the package’s __main__.py so that python -m cloudfile_mover ... also works. It uses Python’s argparse to parse the arguments and then calls the internal move_file function with those parameters.
+The CLI is implemented in the package’s "__main__.py" so that python -m cloudfile_mover ... also works. It uses Python’s argparse to parse the arguments and then calls the internal move_file function with those parameters.
 
 ## Importable Module Usage ##
 Developers can also import and use the library directly in Python. For instance:
