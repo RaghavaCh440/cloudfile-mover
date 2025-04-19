@@ -86,9 +86,15 @@ The Azure credentials have Blob read on source, write on destination, and delete
 ## Command-Line Interface (CLI) ##
 The package installs a console script cloudfile-mover which exposes the functionality via a command-line tool. The CLI usage is:
 
-bash  $ cloudfile-mover SOURCE_URL DEST_URL [--threads N] [--no-progress] [--verbose]
+```
+$ cloudfile-mover SOURCE_URL DEST_URL [--threads N] [--no-progress] [--verbose]
+```
 For example:
-```$ cloudfile-mover s3://my-bucket/data.bin gs://my-gcs-bucket/data.bin --threads 8 --verbose```
+
+```
+$ cloudfile-mover s3://my-bucket/data.bin gs://my-gcs-bucket/data.bin --threads 8 --verbose
+```
+
 This will transfer data.bin from an S3 bucket to a GCS bucket using 8 threads, with verbose logging. Upon success, the source data.bin on S3 is deleted.
 
 CLI options:
@@ -105,8 +111,8 @@ The CLI is implemented in the package’s __main__.py so that python -m cloudfil
 ## Importable Module Usage ##
 Developers can also import and use the library directly in Python. For instance:
 
-```from cloudfile_mover import move_file
-
+```
+from cloudfile_mover import move_file
 # Move a blob from Azure to AWS S3, using 5 threads and no progress bar.
 move_file("azure://myaccount@sourcecontainer/path/to/blob.dat",
           "s3://target-bucket/path/to/blob.dat",
@@ -169,27 +175,35 @@ This minimal pyproject specifies the build system requirements, which allows too
 ## Command Line ##
 After installation, use the cloudfile-mover command:
 
-```cloudfile-mover s3://source-bucket/large-file.dat gs://target-bucket/large-file.dat --threads 8```
+```
+$ cloudfile-mover s3://source-bucket/large-file.dat gs://target-bucket/large-file.dat --threads 8
+```
 
 This will transfer large-file.dat from the AWS S3 bucket to the GCS bucket using 8 parallel threads. By default, you'll see a progress bar. Use -v for verbose output or --no-progress to hide the progress bar.
 
 Examples:
 **Move from Azure to S3, with verbose logging**:
 
-```cloudfile-mover azure://mycontainer/path/data.bin s3://my-bucket/path/data.bin -t 4 -v```
+```
+$ cloudfile-mover azure://mycontainer/path/data.bin s3://my-bucket/path/data.bin -t 4 -v
+```
 
 **Move from GCS to Azure**:
 
-```cloudfile-mover gs://my-gcs-bucket/my.obj azure://mycontainer/my.obj```
+```
+$cloudfile-mover gs://my-gcs-bucket/my.obj azure://mycontainer/my.obj
+```
 
 **Note on URLs**: For Azure, you can specify the storage account either in the URL (e.g. azure://account@container/blob) or via the environment variable AZURE_STORAGE_ACCOUNT. Ensure your credentials (AWS keys, GCP service account, Azure service principal or managed identity) are set up in the environment so that each SDK can find them.
 
 ## Python Library ##
 You can also use cloudfile-mover in your Python code:
-```from cloudfile_mover import move_file
 
+```
+from cloudfile_mover import move_file
 move_file("s3://my-bucket/data.csv", "azure://myaccount@mycontainer/data.csv", threads=6)
 ```
+
 This will perform the same operation programmatically. Adjust threads and show_progress as needed. If the move_file call raises no exception, the transfer was successful and the source object has been deleted.
 
 ## How it Works ##
@@ -201,15 +215,14 @@ This approach enables transferring very large files (multi-GB or even TB) effici
 
 ## License ##
 
-```This README provides an overview, installation, usage examples (CLI and code), and a brief mention of how it works and license. In an actual project, one might expand the README with troubleshooting tips or more details on authentication.
+```
+This README provides an overview, installation, usage examples (CLI and code), and a brief mention of how it works and license. In an actual project, one might expand the README with troubleshooting tips or more details on authentication.
 
 ### `LICENSE`
-```
 
 MIT License Copyright (c) 2025 Raghava Chellu
 Permission is hereby granted, free of charge, to any person obtaining a copy ...
 
-```
 *(Full MIT License text included here.)*
 
 The MIT license is a permissive license that we include to make the package open-source. Users can refer to this for their rights to use and distribute the code.
