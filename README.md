@@ -18,7 +18,7 @@ cloudfile-mover is a Python library designed for high-performance transfer (move
 **Importable Library**: Can be used as a Python module with a move_file function for programmatic access.
 **PyPI-Ready Package**: Provided with setup files, tests, and documentation for ease of installation and distribution.
 
-# Design and Implementation
+## Design and Implementation
 
 ## Cross-Provider Transfer Support
 
@@ -86,17 +86,17 @@ The Azure credentials have Blob read on source, write on destination, and delete
 ## Command-Line Interface (CLI) ##
 The package installs a console script cloudfile-mover which exposes the functionality via a command-line tool. The CLI usage is:
 
-``` $ cloudfile-mover SOURCE_URL DEST_URL [--threads N] [--no-progress] [--verbose] ```
+bash  $ cloudfile-mover SOURCE_URL DEST_URL [--threads N] [--no-progress] [--verbose]
 For example:
-```$ cloudfile-mover s3://my-bucket/data.bin gs://my-gcs-bucket/data.bin --threads 8 --verbose ```
+```$ cloudfile-mover s3://my-bucket/data.bin gs://my-gcs-bucket/data.bin --threads 8 --verbose```
 This will transfer data.bin from an S3 bucket to a GCS bucket using 8 threads, with verbose logging. Upon success, the source data.bin on S3 is deleted.
 
 CLI options:
---threads N (or -t N): Number of parallel threads to use (defaults to 4). Using more threads can speed up transfer for high-bandwidth environments, but may consume more memory and network I/O.
+**--threads N (or -t N)**: Number of parallel threads to use (defaults to 4). Using more threads can speed up transfer for high-bandwidth environments, but may consume more memory and network I/O.
 
---no-progress: Disable the tqdm progress bar. Useful for scripting or if output is being captured to a file.
+**--no-progress**: Disable the tqdm progress bar. Useful for scripting or if output is being captured to a file.
 
---verbose (or -v): Enable verbose output (DEBUG level logging). This will print details for each chunk and retry, which can help in diagnosing speed bottlenecks or errors.
+**--verbose (or -v)**: Enable verbose output (DEBUG level logging). This will print details for each chunk and retry, which can help in diagnosing speed bottlenecks or errors.
 
 (Future extension) One could imagine a --quiet flag to suppress even info logs, but by default if you don’t use --verbose, the output is minimal.
 
@@ -110,14 +110,16 @@ Developers can also import and use the library directly in Python. For instance:
 # Move a blob from Azure to AWS S3, using 5 threads and no progress bar.
 move_file("azure://myaccount@sourcecontainer/path/to/blob.dat",
           "s3://target-bucket/path/to/blob.dat",
-          threads=5, show_progress=False) ```
+          threads=5, show_progress=False)
+```
 
 The move_file function provides the core functionality. It can be integrated into Python applications, allowing programmatic control (for example, moving multiple files in a loop, or using custom logic to determine source/dest at runtime).
 The module interface could also be extended with more granular functions or classes in the future (for example, to support configuring chunk size, or to perform copy without deleting source, etc.), but move_file covers the primary use-case of moving a single object.
 
 ## Package Structure ##
 The project is organized as a standard Python package, ready to be published to PyPI. The important files and their roles are:
-cloudfile-mover/
+
+```cloudfile-mover/
 ├── cloudfile_mover/
 │   ├── __init__.py          # Makes the package importable, exposes move_file
 │   ├── core.py              # Core logic for transferring files between clouds
@@ -129,7 +131,7 @@ cloudfile-mover/
 ├── pyproject.toml           # Build system configuration (PEP 517)
 ├── README.md                # Documentation and usage instructions
 └── LICENSE                  # MIT License text
-
+```
 ## A few implementation notes regarding  cloudfile_mover/core.py code: ##
 We define separate classes for source and destination handling of each provider. This encapsulates provider-specific logic (like how to read a range or upload a part) cleanly.
 
@@ -174,7 +176,7 @@ This will transfer large-file.dat from the AWS S3 bucket to the GCS bucket using
 Examples:
 **Move from Azure to S3, with verbose logging**:
 
-``` cloudfile-mover azure://mycontainer/path/data.bin s3://my-bucket/path/data.bin -t 4 -v```
+```cloudfile-mover azure://mycontainer/path/data.bin s3://my-bucket/path/data.bin -t 4 -v```
 
 **Move from GCS to Azure**:
 
@@ -192,22 +194,22 @@ This will perform the same operation programmatically. Adjust threads and show_p
 
 ## How it Works ##
 cloudfile-mover splits the file into chunks and transfers them in parallel using the cloud providers' APIs:
-AWS S3: uses multipart upload for files larger than 5MB.
-GCS: uploads chunks as temporary objects, then uses the compose API to merge them.
-Azure: uses block blob uploads (staging blocks and then committing them).
+**AWS S3**: uses multipart upload for files larger than 5MB.
+**GCS**: uploads chunks as temporary objects, then uses the compose API to merge them.
+**Azure**: uses block blob uploads (staging blocks and then committing them).
 This approach enables transferring very large files (multi-GB or even TB) efficiently. See the project documentation for more details on the implementation.
 
 ## License ##
 
 ```This README provides an overview, installation, usage examples (CLI and code), and a brief mention of how it works and license. In an actual project, one might expand the README with troubleshooting tips or more details on authentication.
 
-### `LICENSE` ```
+### `LICENSE`
+```
 
 MIT License Copyright (c) 2025 Raghava Chellu
 Permission is hereby granted, free of charge, to any person obtaining a copy ...
 
 ```
-
 *(Full MIT License text included here.)*
 
 The MIT license is a permissive license that we include to make the package open-source. Users can refer to this for their rights to use and distribute the code.
@@ -221,10 +223,4 @@ The design leverages documented capabilities of each cloud provider for large fi
 - Google Cloud Storage compose operation (max 32 components)&#8203;:contentReference[oaicite:25]{index=25} and need to delete source components after compose&#8203;:contentReference[oaicite:26]{index=26}.
 - Azure Block Blob uploads and parallel block staging&#8203;:contentReference[oaicite:27]{index=27}, including Azure SDK’s use of parallel connections for large blobs&#8203;:contentReference[oaicite:28]{index=28}.
 - Authentication best practices, such as Google Cloud Application Default Credentials&#8203;:contentReference[oaicite:29]{index=29}.
-
 ```
-
-
-
-
-
