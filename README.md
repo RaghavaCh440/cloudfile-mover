@@ -2,21 +2,32 @@
 
 ## Introduction
 
-cloudfile-mover is a Python library designed for high-performance transfer (move) of large files between cloud storage providers: Amazon S3, Google Cloud Storage (GCS), and Azure Blob Storage. It handles the complexities of cross-provider data transfer by efficiently downloading from the source and uploading to the destination in parallel, using multi-threading and cloud-native large file APIs. This tool aims to achieve true "move" semantics – the source file is deleted after a successful copy to the destination – while providing robust features like multipart uploads, progress monitoring, and automatic retries. Moving very large objects across different cloud providers can be challenging. Each provider has its own API and best practices for large file transfers. For example, AWS S3 supports Multipart Upload for files up to 5 TiB (with up to 10,000 parts), requiring each part (except the last) to be at least 5 MiB in size. Google Cloud Storage lacks an exact multipart upload API but allows composing up to 32 separate uploaded objects into one final object. Azure Blob Storage uses Block Blobs, where large files are broken into blocks that can be uploaded independently (even concurrently) and then committed to form the final blob. cloudfile-mover abstracts these details, providing a uniform interface to move data between any two supported cloud buckets.
+Cloudfile-mover is a Python library designed for high-performance transfer (move) of large files between cloud storage providers: Amazon S3, Google Cloud Storage (GCS), and Azure Blob Storage. It handles the complexities of cross-provider data transfer by efficiently downloading from the source and uploading to the destination in parallel, using multi-threading and cloud-native large file APIs. This tool aims to achieve true "move" semantics – the source file is deleted after a successful copy to the destination – while providing robust features like multipart uploads, progress monitoring, and automatic retries. Moving very large objects across different cloud providers can be challenging. Each provider has its own API and best practices for large file transfers. For example, AWS S3 supports Multipart Upload for files up to 5 TiB (with up to 10,000 parts), requiring each part (except the last) to be at least 5 MiB in size. Google Cloud Storage lacks an exact multipart upload API but allows composing up to 32 separate uploaded objects into one final object. Azure Blob Storage uses Block Blobs, where large files are broken into blocks that can be uploaded independently (even concurrently) and then committed to form the final blob. cloudfile-mover abstracts these details, providing a uniform interface to move data between any two supported cloud buckets.
 
 ## Features
 
 **Cross-Provider Transfers**: Move files between S3, GCS, and Azure Blob Storage in any combination (e.g. S3 → GCS, Azure → S3, etc.).
+
 **High Performance via Multithreading**: Utilizes multi-threading to download and upload file chunks in parallel, significantly speeding up transfers for large files.
+
 **Large File Segmentation**: Automatically splits large files into chunks (e.g. using S3 multipart upload, GCS object composition, Azure block blobs) to support very large sizes and improve throughput.
+
 **Robustness with Retries**: Implements retry logic for network hiccups or transient cloud errors on each chunk transfer.
+
 **Progress Bar**: Displays a tqdm progress bar showing the transfer progress (with options to suppress it for non-interactive use).
+
 **Flexible Logging**: Uses Python’s logging to output transfer information. Verbosity can be adjusted (quiet, info, debug) via a CLI flag.
+
 **True Move Semantics**: Upon successful transfer to the destination, the source object is deleted, mimicking a “move” rather than “copy”.
+
 **Secure Authentication**: Leverages standard cloud authentication methods (no credentials are ever hardcoded). Supports AWS IAM roles/keys, Google Application Default Credentials, and Azure DefaultAzureCredential for seamless auth.
+
 **Command-Line Interface (CLI)**: Includes a CLI script cloudfile-mover with options such as --threads, --verbose, --no-progress.
+
 **Importable Library**: Can be used as a Python module with a move_file function for programmatic access.
+
 **PyPI-Ready Package**: Provided with setup files, tests, and documentation for ease of installation and distribution.
+
 
 ## Design and Implementation
 
