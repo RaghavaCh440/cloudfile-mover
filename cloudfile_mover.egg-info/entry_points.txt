@@ -1,2 +1,0 @@
-[console_scripts]
-cloudfile-mover = cloudfile_mover.__main__:main

@@ -1,2 +1,0 @@
-cloudfile_mover
-tests
