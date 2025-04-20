@@ -113,6 +113,14 @@ pip install cloudfile-mover
 The package installs a console script cloudfile-mover which exposes the functionality via a command-line tool. The CLI usage is:
 
 ```
+export GOOGLE_APPLICATION_CREDENTIALS="/root/nextgen-mft-ai-8cb4c3063eff.json"
+export AWS_ACCESS_KEY_ID="ABCPOIUJUADAD"
+export AWS_SECRET_ACCESS_KEY="jsadlkfjalsdfjdjljd"
+export AWS_DEFAULT_REGION="us-east-1"
+```
+
+
+```
 $ cloudfile-mover SOURCE_URL DEST_URL [--threads N] [--no-progress] [--verbose]
 ```
 For example:
@@ -120,6 +128,21 @@ For example:
 ```
 $ cloudfile-mover s3://my-bucket/data.bin gs://my-gcs-bucket/data.bin --threads 8 --verbose
 ```
+
+## Testing and Results ##
+
+```
+$ cloudfile-mover gs://gcscloudfilemover/testfile_50GB.dat s3://rxc440ucket/TESTFILE_50GB.dat --threads 8 --verbose
+```
+
+**Sample GCS Bucket**
+![Location of File in GCS Bucket](images/gcsbucket.png)
+
+**Test Transfer Status**
+![Status of the Test File Transfer](images/test_results.png)
+
+**Sample S3 Bucket**
+![Location of the File in S3](images/awss3bucket.png)
 
 This will transfer data.bin from an S3 bucket to a GCS bucket using 8 threads, with verbose logging. Upon success, the source data.bin on S3 is deleted.
 

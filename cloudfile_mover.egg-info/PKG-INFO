@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: cloudfile-mover
+Version: 0.1.0
+Summary: Move large files between AWS S3, Google Cloud Storage, and Azure Blob Storage with high performance.
+Home-page: https://github.com/youruser/cloudfile-mover
+Author: Your Name
+Author-email: you@example.com
+License: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: System :: Archiving :: Backup
+Classifier: Topic :: Internet :: File Transfer Protocol (FTP)
+Classifier: Intended Audience :: Developers
+Requires-Python: >=3.7
+License-File: LICENSE
