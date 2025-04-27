@@ -275,20 +275,12 @@ This README provides an overview, installation, usage examples (CLI and code), a
 ### `LICENSE`
 
 MIT License
+
 Copyright (c) 2025 Raghava Chellu
-Permission is hereby granted, free of charge, to any person obtaining a copy ...
 
-*(Full MIT License text included here.)*
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The MIT license is a permissive license that we include to make the package open-source. Users can refer to this for their rights to use and distribute the code.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
----
-
-**Sources:**
-
-The design leverages documented capabilities of each cloud provider for large file transfers:
-- AWS S3 Multipart Upload limits and usage&#8203;:contentReference[oaicite:22]{index=22}&#8203;:contentReference[oaicite:23]{index=23}, and the necessity to complete or abort uploads to free storage&#8203;:contentReference[oaicite:24]{index=24}.
-- Google Cloud Storage compose operation (max 32 components)&#8203;:contentReference[oaicite:25]{index=25} and need to delete source components after compose&#8203;:contentReference[oaicite:26]{index=26}.
-- Azure Block Blob uploads and parallel block staging&#8203;:contentReference[oaicite:27]{index=27}, including Azure SDK’s use of parallel connections for large blobs&#8203;:contentReference[oaicite:28]{index=28}.
-- Authentication best practices, such as Google Cloud Application Default Credentials&#8203;:contentReference[oaicite:29]{index=29}.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
