@@ -272,7 +272,7 @@ This approach enables transferring very large files (multi-GB or even TB) effici
 ```
 This README provides an overview, installation, usage examples (CLI and code), and a brief mention of how it works and license. In an actual project, one might expand the README with troubleshooting tips or more details on authentication.
 
-** MIT License **
+MIT License
 
 Copyright (c) 2025 Raghava Chellu
 
