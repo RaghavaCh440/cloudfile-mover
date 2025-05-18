@@ -4,7 +4,7 @@ setup(
     name="cloudfile-mover",
     version="0.1.0",
     description="Move large files between AWS S3, Google Cloud Storage, and Azure Blob Storage with high performance.",
-    author="Your Name",
+    author="Raghava Chellu",
     author_email="you@example.com",
     url="https://github.com/youruser/cloudfile-mover",
     license="MIT",
