@@ -267,6 +267,10 @@ cloudfile-mover splits the file into chunks and transfers them in parallel using
 
 This approach enables transferring very large files (multi-GB or even TB) efficiently. See the project documentation for more details on the implementation.
 
+## Author
+
+[Raghava Chellu](https://github.com/RaghavaCh440)
+
 ## License ##
 
 ```
